@@ -1,9 +1,10 @@
 import { HiOutlineLocationMarker } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 
 const HotJobCard = ({ job }) => {
 
-    const { title, company, company_logo, requirements, description, location, salaryRange } = job;
+    const { _id, title, company, company_logo, requirements, description, location, salaryRange } = job;
 
     return (
         <div className="card card-compact bg-base-100 shadow-xl">
@@ -28,7 +29,9 @@ const HotJobCard = ({ job }) => {
                 </div>
                 <div className="card-actions justify-end items-center">
                     <p>Salary: {salaryRange.min}-{salaryRange.max}{salaryRange.currency}</p>
-                    <button className="btn btn-primary">Apply</button>
+                    <Link to={`/jobs/${_id}`}>
+                        <button className="btn btn-primary">Apply</button>
+                    </Link>
                 </div>
             </div>
         </div>
