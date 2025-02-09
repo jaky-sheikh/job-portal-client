@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 
 
 const AddJob = () => {
@@ -7,10 +8,34 @@ const AddJob = () => {
         const formData = new FormData(e.target);
         // console.log(formData.entries())
         const initialData = Object.fromEntries(formData.entries());
-        console.log(initialData);
+        // console.log(initialData);
         const { min, max, currency, ...newJob } = initialData;
         newJob.salaryRange = { min, max, currency }
+        newJob.requirements = newJob.requirements.split('\n')
+        newJob.responsibilities = newJob.responsibilities.split('\n')
         console.log(newJob)
+
+        fetch('http://localhost:5000/jobs', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newJob)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.insertedId) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Job has been added",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    // navigate('/myApplications')
+                }
+            })
+
     }
 
     return (
@@ -102,6 +127,12 @@ const AddJob = () => {
                             <span className="label-text">Job Responsibility</span>
                         </label>
                         <textarea className="textarea textarea-bordered" name="responsibilities" placeholder="Put each responsibility in a new line" required></textarea>
+                    </div>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Application Deadline</span>
+                        </label>
+                        <input type="date" name="applicationDeadline" placeholder="Application Deadline" className="input input-bordered" required />
                     </div>
                     <div className="form-control">
                         <label className="label">
