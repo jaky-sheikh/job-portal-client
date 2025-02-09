@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 
@@ -32,7 +33,7 @@ const AddJob = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    // navigate('/myApplications')
+                    Navigate('/myPostedJobs')
                 }
             })
 
