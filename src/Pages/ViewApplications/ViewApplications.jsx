@@ -1,9 +1,36 @@
 import { useLoaderData } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const ViewApplications = () => {
 
     const applications = useLoaderData();
+
+    const handleStatusUpdate = (e, id) => {
+        console.log(e.target.value, id)
+        const data = {
+            status: e.target.value
+        }
+        fetch(`http://localhost:5000/job-applications/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Status Has been updated.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+    }
 
     return (
         <div>
@@ -15,18 +42,29 @@ const ViewApplications = () => {
                         <tr>
                             <th></th>
                             <th>Email</th>
-                            <th>Job</th>
-                            <th>Favorite Color</th>
+                            <th>Status</th>
+                            <th>Update status</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         {
                             applications.map((app, index) => <tr key={app._id}>
-                                <th>{index}</th>
+                                <th>{index + 1}</th>
                                 <td>{app.applicant_email}</td>
                                 <td>Quality Control Specialist</td>
-                                <td>Blue</td>
+                                <td>
+                                    <select
+                                        onChange={(e) => handleStatusUpdate(e, app._id)}
+                                        defaultValue={app.status || 'Change status'}
+                                        className="select select-bordered select-xs w-full max-w-xs">
+                                        <option disabled>Change status</option>
+                                        <option>Under Review</option>
+                                        <option>Set Interview</option>
+                                        <option>Hired</option>
+                                        <option>Rejected</option>
+                                    </select>
+                                </td>
                             </tr>)
                         }
 
