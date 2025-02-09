@@ -4,7 +4,7 @@ import { easeOut, motion } from "motion/react";
 
 const Banner = () => {
     return (
-        <div>
+        <div style={{ overflowX: "hidden" }}>
             <div className="hero bg-base-200 min-h-96">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className='flex-1'>
